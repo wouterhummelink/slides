@@ -1,0 +1,334 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-noescape data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$" data-element-attributes="{_\s*?([^}]+?)}">
+					<script type="text/template">
+# Ansible
+## Roles & Windows 
+### & Some Best Practices
+
+---
+
+## Inhoud
+
+* Recap Playbooks
+* Includes
+* Roles
+* Windows
+* Best Practices
+
+---
+
+# Playbooks
+
+## Recap & Includes
+
+--
+
+```yaml
+---
+- hosts: webservers
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - yum:
+      name: httpd
+      state: latest
+  - template:
+      src: /srv/httpd.j2
+      dest: /etc/httpd.conf
+    notify:
+    - restart apache
+  - service:
+      name: httpd
+      state: started
+      enabled: yes
+  handlers:
+    - service:
+        name: httpd
+        state: restarted
+```
+<!-- {_class="stretch"} -->
+
+--
+
+### Playbook Structuur
+Een playbook bestaat uit een lijst "plays" met de volgende elementen
+* `hosts` Een hostnaam, groep of range hosts
+* `vars` Variabelen voor de play
+* `tasks` Een lijst aan te roepen ansible modules
+* `handlers` Een lijst optionele taken die kunnen worden gebruikt als nodig
+
+--
+
+### Includes
+
+Om grotere playbooks meer structuur te geven kan je het opsplitsen in meerdere files
+
+```
+- hosts: webserver
+  vars_files:
+    - vars/webserver.yml
+  tasks:
+    - include_tasks: webserver.yml
+
+---
+
+## Roles
+
+In ansible kan je roles gebruiken om een project meer structuur te geven.
+Ook kan je door de ansible playbooks in roles op te delen herbruikbare componenten maken.
+
+--
+
+## Roles - Structuur
+
+```
+site.yml
+webservers.yml
+fooservers.yml
+roles/
+   common/
+     tasks/
+     handlers/
+     files/
+     templates/
+     vars/
+     defaults/
+     meta/
+   webservers/
+     tasks/
+     defaults/
+     meta/
+```
+
+--
+
+## Tasks & handlers in roles
+
+```yaml
+  - yum:
+      name: httpd
+      state: latest
+  - template:
+      src: /srv/httpd.j2
+      dest: /etc/httpd.conf
+    notify:
+    - restart apache
+```
+
+--
+
+## Vars & Defaults
+
+Vars files geven waarden voor de roles
+```
+http_port: 80
+max_clients: 200
+```
+__**NB** Vars zijn altijd global.__
+
+--
+
+## Vars Precedentie
+
+* extra vars (-e in the command line) always win
+* connection variables (ansible_user, etc.)
+* “most everything else” (command line switches, vars in play, included vars, role vars, etc.)
+* facts discovered about a system
+* variables defined in inventory
+* “role defaults”, which lose in priority to everything and are the most easily overridden
+
+[Documentation](http://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable)
+
+--
+
+## Een role gebruiken in een playbook (1)
+Roles kunnen worden gebruikt in plaats van een tasks lijst
+```yaml
+- hosts: webservers
+  vars:
+    http_port: 8080
+  roles:
+    - common
+    - webserver
+```
+
+--
+
+## Een role gebruiken in een playbook (2)
+
+__of__ als of het zelf een task is
+
+```yaml
+- hosts: webservers
+  tasks:
+    include_role:
+      name: webservers
+```
+
+--
+
+## Ansible Galaxy
+
+* Ansible Galaxy is een website waar roles kunnen worden gedeeld en doorzocht
+* `ansible-galaxy` is het commando om roles te downloaden
+* `ansible-galaxy init` maakt snel een lege role structuur aan
+
+---
+
+# Windows
+
+--
+
+## Ansible & Windows
+
+* Ansible gebruikt om windows te benaderen WinRM & Powershell
+* Controlnode blijft Linux
+* Vereist de python module winrm op de controlnode
+* Windows Server 2008 & Windows 7 of hoger
+* AD authenticatie wordt ondersteund
+
+--
+
+## Beperkingen
+
+Enkele dingen kunnen niet zomaar met Ansible en Windows:
+
+* Upgrade PowerShell
+* Aanpassen WinRM listeners
+
+Deze zaken zijn beter op te lossen in OS-image of server bootstrap
+
+--
+
+# Inventory
+
+```
+[windows_webservers]
+winweb01 ansible_connection=winrm ansible_port=5985
+```
+
+--
+
+# Playbook
+```yaml
+- name: install-iis
+  win_feature:
+    name: "Web-Server"
+    state: present
+- name: default-website-index
+  win_copy:
+    src: files/index.html
+    dest: "C:\\inetpub\\wwwroot\\index.html"
+```
+
+--
+
+# Demo
+
+---
+
+# Best Practices
+
+* Always name tasks
+* Use YAML syntax for tasks
+* Keep it simple
+
+--
+
+## Always name tasks
+Don't
+```yaml
+- yum:
+    name: httpd
+    state: installed
+```
+Do
+```
+- name: Ensure web server software is installed
+  yum:
+    name: httpd
+    state: installed
+```
+
+--
+
+## Use YAML syntax
+Don't
+```yaml
+- name: Install webserver
+  yum: name=httpd state=installed  update_cache=yes
+```
+Do
+```yaml
+- name: Install webserver
+  yum: 
+    name: httpd 
+    state: installed  
+    update_cache: yes
+```
+
+--
+
+## Keep it simple
+When you can do something simply, do something simply. Do not reach to use every feature of Ansible together, all at once. Use what works for you. For example, you will probably not need vars, vars_files, vars_prompt and –extra-vars all at once, while also using an external inventory file.
+
+If something feels complicated, it probably is, and may be a good opportunity to simplify things.
+
+---
+
+# Links
+
+https://docs.ansible.com/ansible/2.5/user_guide/playbooks_best_practices.html
+https://docs.ansible.com/ansible/2.5/user_guide/playbooks_reuse_roles.html
+https://docs.ansible.com/ansible/2.5/user_guide/windows_usage.html
+
+</script>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+                                margin: 0.1,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
