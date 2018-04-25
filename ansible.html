@@ -37,6 +37,7 @@
 * Recap Playbooks
 * Includes
 * Roles
+* Conditionals & Loops
 * Windows
 * Best Practices
 
@@ -201,6 +202,98 @@ __of__ als of het zelf een task is
 * `ansible-galaxy` is het commando om roles te downloaden
 * `ansible-galaxy init` maakt snel een lege role structuur aan
 
+---
+
+## Conditionals & Loops
+
+* Ansible allows tasks to be skipped if conditions are not met using the when: clause
+* Ansible allows tasks to be performed multiple times using the loop constructs
+* Loop constructs greatly changed between versions 2.4 and 2.5.
+
+--
+
+## Conditionals
+
+* Use when to only perform a task when a particular fact or variable is set.
+
+```yaml
+- hosts: webservers
+  tasks:
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: installed
+      when: ansible_distribution == "CentOS"
+```
+
+--
+
+## Loops
+### Version 2.4 and lower
+
+* Loops are implemented with the with_* attributes on a task.
+* with_items: Loop over a list
+* with_dict: Loop over dictionary key-values
+* with_file: loop over files listing contents
+* with_fileglob: List files in a directory
+
+--
+
+### Example 1: Loop over list
+
+```yaml
+- name: add several users
+  user:
+    name: "{{ item }}"
+    state: present
+    groups: "wheel"
+  with_items:
+     - testuser1
+     - testuser2
+```
+
+--
+
+### Example 2: Loop over list of dictionary
+
+```yaml
+
+- name: add several users
+  user:
+    name: "{{ item.name }}"
+    state: present
+    groups: "{{ item.groups }}"
+  with_items:
+    - { name: 'testuser1', groups: 'wheel' }
+    - { name: 'testuser2', groups: 'root' }     
+```
+
+--
+
+### Example 3: Loop over dictionary
+
+Using the following vars:
+
+```yaml
+---
+users:
+  alice:
+    name: Alice Appleworth
+    telephone: 123-456-7890
+  bob:
+    name: Bob Bananarama
+    telephone: 987-654-3210
+```
+
+Loop and print user's name and phone number
+
+```yaml
+tasks:
+  - name: Print phone records
+    debug:
+      msg: "User {{ item.key }} is {{ item.value.name }} ({{ item.value.telephone }})"
+    with_dict: "{{ users }}"
+```
 ---
 
 # Windows
