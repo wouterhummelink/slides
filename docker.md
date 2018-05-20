@@ -53,7 +53,7 @@ Deze dockerfile draait deze presentatie in een Docker container.
 ```dockerfile
 FROM centos:7
 RUN yum -y install httpd && yum clean all
-ADD docker.html docker.md images js css lib plugin /var/www/html/
+ADD . /var/www/html/
 
 EXPOSE 80/tcp
 CMD ["-D","FOREGROUND"]
@@ -61,17 +61,19 @@ ENTRYPOINT ["/usr/sbin/httpd"]
 ```
 
 --
-Step by step
+
+### Step by step
 * `FROM centos/7 #Basis image` <!-- {_ class="fragment"} -->
 * `RUN yum -y install httpd && yum clean all # Installeer software` <!-- {_ class="fragment"} -->
-* `ADD docker.html docker.md images js css lib plugin /var/www/html/ # Voeg files toe` <!-- {_ class="fragment"} -->
+* `ADD . /var/www/html/ # Voeg files toe` <!-- {_ class="fragment"} -->
 * `EXPOSE 80/tcp # Geef aan dat we op port 80 verkeer ontvangen` <!-- {_ class="fragment"} -->
 * `CMD ["-D","FOREGROUND"] # Command arguments` <!-- {_ class="fragment"} -->
 * `ENTRYPOINT ["/usr/bin/httpd"] # Primary commmand` <!-- {_ class="fragment"} -->
 
 
 --
-Overige directives
+
+###Overige directives
 
 * ENV <!-- {_ class="fragment"} -->
 * VOLUME <!-- {_ class="fragment"} -->
