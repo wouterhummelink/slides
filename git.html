@@ -1,0 +1,270 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-noescape data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$" data-element-attributes="{_\s*?([^}]+?)}">
+					<script type="text/template">
+# Git
+## Versiebeheer beginselen
+
+
+---
+
+## Inhoud
+
+* Waarom versiebeheer
+* Introductie git
+* Basis commando's
+* Werken met branches en remote repositories
+* Links
+
+---
+
+## Waarom versiebeheer
+
+* Houdt geschiedenis bij van alle wijzigingen in je bestanden
+* Makkelijke mechanisme om je bestanden veilig te bewaren
+* Maakt samenwerken op dezelfde bestanden makkelijker
+* Vereist als je wijzigingen gecontroleerd door een oplever proces wil loodsen
+
+--
+
+### Basisbegrippen
+
+* Checkout: In sommige versiebeheer systemen, het reserveren van een bestand of bestanden om er wijzigingen op te maken (SVN, TFS). In anderen (git), het omschakelen naar een branch om erop te werken.
+* Commit/Checkin: Een groep wijzigingen aan één of meer bestanden die vastgelegd worden in versiebeheer
+* Branch: een geisoleerde versie tak waar wijzigingen onafhankelijk op gemaakt kunnen worden
+
+--
+
+* Master branch: De hoofd versie tak waar alle andere aftakkingen van afstemmen. Is veelal de tak waarvan builds voor productie van gemaakt worden
+* Merge: het proces waarmee één branch wordt samengevoegd met een (meestal) verwante tweede branch.
+* Repository: Een verzameling bestanden onder versiebeheer
+* Pull/Fetch: Het ophalen van de laatste versies van een repository
+
+--
+
+### Isolatie vs collaboratie
+
+In de meeste versiebeheer systemen, deel je een repository met andere collega's. Je haalt de laatste versie op van een centrale bron en stuurt je wijzigingen terug. Door dit regelmatig te doen zie je ook de wijzigingen van je collega's.
+
+Soms is dit niet handig. Als je voor welke reden dan ook wijzigingen in isolatie wilt doen, gebruik je een branch. Deze zorgt ervoor dat jouw wijzigingen niet in de weg zitten voor anderen, en visa-versa, tot ze klaar zijn om gemerged te worden.
+
+
+---
+
+## Introductie git
+
+Git is een gedistribueerde versiebeheer systeem. De meeste versiebeheer systemen eisen dat er ergens een centrale server staat die de versie geschiedenis bijhoud op een repository. Git doet dit niet. Een git repository kan volledig zelfstandig functioneren. Maar omdat hij wel het concept van een remote repository kent, is het mogelijk om op meerdere manieren dan de klassieke client-server model versies van een repository bij te houden.
+
+--
+
+### Basis werkconcepten van git
+
+Git kent 3 statusen van bestanden: Modified, Staged, Committed
+
+* Modified: Er is een wijziging gemaakt in je werkmappen
+* Staged: Je hebt de wijzigingen gemarkeerd als zijne klaar om opgenomen te worden in je volgende commit
+* Comitted: De wijziging is opgeslagen in je repository
+
+--
+
+### Installatie git
+
+* Linux
+
+```bash
+
+# Debian-achtige systemen
+apt install git
+
+# Redhat/Centos-achtige systemen
+yum install git
+
+```
+* Mac: probeer git --version te runnen. Als hij niet geinstalleerd is, wordt je geprompt of je het wil installeren
+* Windows: Downloaden en installeren van http://git-scm.com/download/win
+
+--
+
+### Eerste stappen na installatie
+
+* Je eigen identiteit registreren 
+
+```bash
+
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+
+```
+
+* Default editor voor git instellen
+
+```bash
+
+$ git config --global core.editor vim
+
+
+```
+
+---
+
+## Basis commando's
+
+* git help
+* git init
+* git clone
+* git status
+* git add
+* git commit
+
+--
+
+### git help
+
+Git heeft ingebouwde hulp voor alle commando's. Als je `git help <command>` intypt, krijg je uitgebreid hulp. `git <commando> -h` zal wat beknoptere hulp geven
+
+--
+
+### git init
+
+Gebruik git init om van een map een repository te maken. Dit commando zal een .git map aanmaken in de map waarin alle versiebeheer informatie wordt opgeslagen.
+
+--
+
+### git clone
+
+Maak een locale kopie van een remote git repository
+
+```bash
+nralbers@altair ~/sources $ git clone git@github.com:wouterhummelink/slides.git
+Cloning into 'slides'...
+remote: Counting objects: 10068, done.
+remote: Compressing objects: 100% (4019/4019), done.
+remote: Total 10068 (delta 5548), reused 10058 (delta 5541), pack-reused 0
+Receiving objects: 100% (10068/10068), 7.59 MiB | 3.36 MiB/s, done.
+Resolving deltas: 100% (5548/5548), done.
+Checking connectivity... done.
+
+
+```
+
+--
+
+### git status
+
+* Controleer de status van je locale repository
+
+```bash
+On branch gh-pages
+Your branch is up-to-date with 'origin/gh-pages'.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+  git.html
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+```
+
+--
+
+### git add
+
+Markeer één of meer bestanden als klaar om in een commit opgenomen te worden.
+
+```bash
+nralbers@altair ~/sources/slides $ git add *
+nralbers@altair ~/sources/slides $ git status
+On branch gh-pages
+Your branch is up-to-date with 'origin/gh-pages'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+  new file:   git.html
+
+```
+
+--
+
+### git commit
+
+Sla een nieuwe versie op van alle staged bestanden.
+
+```bash
+nralbers@altair ~/sources/slides $ git commit -m "Add new presentation page"
+[gh-pages b2accb1] Add new presentation page
+ 1 file changed, 282 insertions(+)
+ create mode 100644 git.html
+nralbers@altair ~/sources/slides $ 
+
+```
+
+---
+
+## Werken met branches en remote repositories
+
+* git checkout
+* git merge
+* git rebase
+* git push
+* git pull
+
+--
+
+### git checkout <branch>
+
+Verander de bestanden in je werkmap om overeen te komen met de gekozen branch. Met de -b vlag, zal hij een nieuwe branch aanmaken als deze niet bestaat.
+
+---
+
+# Links
+This presentation: https://wouterhummelink.github.io/slides/git.html
+* [Pro Git book](https://git-scm.com/book/en/v2)
+
+
+</script>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+                                margin: 0.1,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
