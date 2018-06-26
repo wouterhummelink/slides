@@ -73,7 +73,7 @@ ENTRYPOINT ["/usr/sbin/httpd"]
 
 --
 
-###Overige directives
+### Overige directives
 
 * ENV <!-- {_ class="fragment"} -->
 * VOLUME <!-- {_ class="fragment"} -->
@@ -84,7 +84,7 @@ ENTRYPOINT ["/usr/sbin/httpd"]
 
 ---
 
-Docker gebruiken
+### Docker gebruiken
 
 * `docker build -t slides .` 
   * Bouw de dockerfile in de huidige directory
@@ -97,7 +97,7 @@ Docker gebruiken
 
 ---
 
-OCI Images
+### OCI Images
 
 Docker images zijn gestandaardiseerd in de OCI Image specificatie
 Elke _layer_ wordt targzipt en voorzien van metadata in json format
@@ -106,7 +106,7 @@ https://github.com/opencontainers/image-spec
 
 ---
 
-Registries
+### Registries
 
 Docker registry is in feite een http dienst waar de layers van images en metadata kan worden gezocht en gedownload
 
@@ -119,7 +119,7 @@ docker pull docker.io/php
 
 ---
 
-Docker advanced topics
+### Docker advanced topics
 
 * docker run -d mysql -v /var/tmp/mysql:/var/lib/mysql:Z
 * docker run -d -l mysql app 
@@ -127,7 +127,7 @@ Docker advanced topics
 
 ---
 
-Alternate runtimes
+### Alternate runtimes
 
 * rkt (Tectonic/Container Linux)
 * containerd
