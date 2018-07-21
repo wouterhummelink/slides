@@ -7,3 +7,21 @@
 # Why containers
 
 ![Why containers](images/why_containers.svg)
+
+--
+
+## Wat is kubernetes
+
+* Container orchestrator
+* Orchestreert netwerk, storage, applicaties
+* Desired state engine
+
+--
+
+## Architectuur
+
+![Kubernetes Architecture](images/kubernetes_architecture.png)
+
+--
+
+
