@@ -2,7 +2,7 @@
 
 ![Kubernetes Logo](images/kubernetes.svg) <!-- {_ height="40%" width="40% style="border-width: 0;"  } -->
 
----
+--
 
 ## Recap 
 ### Why containers
@@ -47,16 +47,19 @@
 * minishift
 * ansible
 
----
+--
 
 ## Concepten
 
 * Pod
 * Service
+* Namespace
 * Replicaset
 * Deployment
 * PersistentVolume
 * PersistentVolumeClaim
+* Secrets
+* Configmaps
 
 --
 
@@ -72,13 +75,13 @@ Er zijn vele plugins beschikbaar zoals vlan, bridge, en diverse soorten overlay 
 ---
 
 ## Advanced topics
-* Secrets
-* Configmaps
 * Ingress
 * Quotas
 * Networkpolicy
 * ServiceAccount
 * PodSecurityPolicy
+* StatefulSet
+* DaemonSet
 * RBAC
 
 ---
