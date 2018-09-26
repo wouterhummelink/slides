@@ -104,7 +104,7 @@ pipeline {
 
 --
 
-# Project structure
+### Project structure
 ```
 molecule/
 └── default
