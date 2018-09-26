@@ -178,4 +178,10 @@ verifier:
 
 # Demo #2
 
+---
 
+### Links
+
+https://molecule.readthedocs.io/en/latest/
+https://jenkins.io/doc/book/pipeline/
+https://wouterhummelink.github.io/slides/jenkins.html
