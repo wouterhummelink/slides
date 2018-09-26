@@ -15,7 +15,7 @@
 * Begonnen onder de naam Hudson als opensource java-buildserver
 * Jenkins sinds 2011 na conflict met Oracle
 * Sindsdien doorontwikkeld tot CI tool die met ongeveer alle talen kan werken
-* > 1400 plugins
+* Over 1400 plugins
 
 -- 
 
@@ -73,6 +73,7 @@ pipeline {
     }
 }
 ```
+
 --
 
 ### Concepten
