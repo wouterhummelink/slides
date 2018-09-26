@@ -1,5 +1,3 @@
----
-
 ![Jenkins Logo](images/jenkins-ar21.svg) <!-- {_ height="40%" width="40% style="border-width: 0;"  } -->
 # Jenkins CI
 ## & Ansible testing using molecule
