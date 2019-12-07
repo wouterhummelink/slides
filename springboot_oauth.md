@@ -1,4 +1,4 @@
-![Jenkins Logo](images/jenkins-ar21.svg) <!-- {_ height="40%" width="40% style="border-width: 0;"  } -->
+![Spring Logo](images\spring-boot-security.png) <!-- {style="border-width: 0;"  } -->
 # Spring Security & OpenID Connect
 
 
