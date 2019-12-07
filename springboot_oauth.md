@@ -1,4 +1,4 @@
-![Spring Logo](images\spring-boot-security.png) <!-- {style="border-width: 0;"  } -->
+![Spring Logo](images\spring-boot-security.png) <!-- .element: style="border-width: 0;" -->
 # Spring Security & OpenID Connect
 
 --
