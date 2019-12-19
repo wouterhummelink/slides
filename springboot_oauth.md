@@ -13,7 +13,7 @@
 
 ---
 
-## Wat is spring (Boot)?
+## Wat is Spring (Boot)?
 ### Spring
 * Spring is een Java _Framework_
 * Dependency Injection
@@ -35,11 +35,11 @@
   - Session Fixation
   - Clickjacking
   - XSRF
-* Security op request niveau
+* Security op request/method niveau
 
 --
 
-## Waaron OpenID Connect?
+## Waarom OpenID Connect?
 * Biedt authenticatie uit een centrale bron
 * Biedt authorizatie
 * Vermindert risico's van passwordgebruik
@@ -53,6 +53,7 @@
 
 --
 
+### Hoe werkt OpenID?
 ![Oauth2 Flow](images\active-directory-oauth-code-flow-web-app.png)
 
 --
@@ -63,6 +64,7 @@
 
 --
 
+### Dependencies
 ```xml
 <dependency>
   <groupId>org.springframework.boot</groupId>
@@ -77,6 +79,7 @@
 
 --
 
+### Spring application.yml
 ```yaml
 azure:
   activedirectory:
@@ -101,6 +104,8 @@ security:
 
 --
 
+### Spring Web security configurator
+
 ```java
 @Configuration
 public class AzureAdSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -122,6 +127,26 @@ public class AzureAdSecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
 ```
 
+--
+
+# Securing Methods
+
+```java
+    @RequestMapping("/")
+    @Secured("ROLE_AquariumAppTest")
+    public String handleIndex(HttpServletRequest request, Model model, Authentication authentication) {
+        model.addAttribute("principal", authentication);
+        return "index";
+    }
+
+    @RequestMapping("/")
+    @Secured("ROLE_AquariumAppDeny")
+    public String handleIndex2(HttpServletRequest request, Model model, Authentication authentication) {
+        model.addAttribute("principal", authentication);
+        return "index";
+    }
+```
+
 ---
 
 ### Bronnen
@@ -129,6 +154,7 @@ public class AzureAdSecurityConfiguration extends WebSecurityConfigurerAdapter {
 * https://github.com/microsoft/azure-spring-boot
 * https://spring.io/guides/gs/securing-web
 * https://spring.io/guides/topicals/spring-security-architecture
+* https://docs.microsoft.com/nl-nl/azure/active-directory/develop/v1-protocols-openid-connect-code
 
 --
 
