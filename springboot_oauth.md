@@ -129,7 +129,7 @@ public class AzureAdSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 --
 
-# Securing Methods
+### Securing Methods
 
 ```java
     @RequestMapping("/")
