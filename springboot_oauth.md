@@ -139,7 +139,7 @@ public class AzureAdSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return "index";
     }
 
-    @RequestMapping("/")
+    @RequestMapping("/role2")
     @Secured("ROLE_AquariumAppDeny")
     public String handleIndex2(HttpServletRequest request, Model model, Authentication authentication) {
         model.addAttribute("principal", authentication);
