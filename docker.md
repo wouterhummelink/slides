@@ -7,6 +7,7 @@
 ### Wat is Docker?
 
 Docker is een toolset waarmee gebruikers applicaties in containers kunnen draaien.
+
 * Een _runtime_ waarmee images als _container_ gedraaid kunnen worden
 * Een _taal_ om het bouwen van images te beschrijven
 * Een _image format_ om gebouwde images op te slaan
