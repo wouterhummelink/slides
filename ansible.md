@@ -1,5 +1,8 @@
 # Ansible
 
+![AAP Logo](images/ansible.png) <!-- {_ height="40%" width="40% style="border-width: 0;"  } -->
+
+
 ---
 
 ## Inhoud
@@ -14,6 +17,8 @@
 * Collections
 * Windows
 * Best Practices
+* Ansible Automation Platform
+* Demo
 
 ---
 
@@ -31,6 +36,7 @@
 
 * Het inventory geeft aan welke machines/devices beheerd worden
 * Bevat groepen die machines onderverdelen 
+* Kan een bestand zijn, maar ook een plugin of script (bijv. vanuit cloud, satellite etc.)
 
 ```ini
 host1.example.com
@@ -46,6 +52,18 @@ host[1:2].example.com
 [db]
 host3.example.com
 ```
+
+---
+
+## Ad-hoc commands
+
+```bash
+ansible all -m ping 
+ansible all -m setup
+ansible foo.example.com -m yum -a "name=httpd state=installed"
+ansible foo.example.com -m command -a "/usr/sbin/reboot"
+```
+
 ---
 
 ## Playbooks
@@ -288,6 +306,36 @@ __of__ als of het zelf een task is
 * `ansible-galaxy` is het commando om roles te downloaden
 * `ansible-galaxy init` maakt snel een lege role structuur aan
 
+---
+
+## Collections
+
+* Een ansible content collection is een bundeling van roles, ansible plugins en playbooks
+* Collections worden aangeboden door redhat of via community
+
+```
+collection/
+├── docs/
+├── galaxy.yml
+├── meta/
+│   └── runtime.yml
+├── plugins/
+│   ├── modules/
+│   │   └── module1.py
+│   ├── inventory/
+│   └── .../
+├── README.md
+├── roles/
+│   ├── role1/
+│   ├── role2/
+│   └── .../
+├── playbooks/
+│   ├── files/
+│   ├── vars/
+│   ├── templates/
+│   └── tasks/
+└── tests/
+```
 
 ---
 
@@ -392,9 +440,19 @@ If something feels complicated, it probably is, and may be a good opportunity to
 
 ---
 
+## Ansible Automation Platform
+
+
+
+---
+
+# Demo
+
+---
+
 # Links
 This presentation: https://wouterhummelink.github.io/slides/ansible.html
-* [Best Practices](https://docs.ansible.com/ansible/2.5/user_guide/playbooks_best_practices.html)
-* [Roles](https://docs.ansible.com/ansible/2.5/user_guide/playbooks_reuse_roles.html)
-* [Ansible & Windows](https://docs.ansible.com/ansible/2.5/user_guide/windows_usage.html)
+* [Best Practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
+* [Roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html)
+* [Ansible & Windows](https://docs.ansible.com/ansible/latest/user_guide/windows_usage.html)
 
