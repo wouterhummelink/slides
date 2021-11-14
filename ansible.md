@@ -34,7 +34,7 @@
 ## Inventory
 
 * Het inventory geeft aan welke machines/devices beheerd worden
-* Bevat groepen die machines onderverdelen 
+* Bevat groepen die machines onderverdelen
 * Kan een bestand zijn, maar ook een plugin of script (bijv. vanuit cloud, satellite etc.)
 
 ```ini
@@ -99,7 +99,9 @@ ansible foo.example.com -m command -a "/usr/sbin/reboot"
 --
 
 ### Playbook Structuur
+
 Een playbook bestaat uit een lijst "plays" met de volgende elementen
+
 * `hosts` Een hostnaam, groep of range hosts
 * `vars` Variabelen voor de play
 * `tasks` Een lijst aan te roepen ansible modules
@@ -213,7 +215,7 @@ Ook kan je door de ansible playbooks in roles op te delen herbruikbare component
 
 ## Roles - Structuur
 
-```
+```text
 site.yml
 webservers.yml
 fooservers.yml
@@ -252,10 +254,12 @@ roles/
 ## Vars & Defaults
 
 Vars files geven waarden voor de roles
-```
+
+```yaml
 http_port: 80
 max_clients: 200
 ```
+
 __**NB** Vars zijn altijd global.__
 
 --
@@ -274,7 +278,9 @@ __**NB** Vars zijn altijd global.__
 --
 
 ## Een role gebruiken in een playbook (1)
+
 Roles kunnen worden gebruikt in plaats van een tasks lijst
+
 ```yaml
 - hosts: webservers
   vars:
@@ -312,7 +318,7 @@ __of__ als of het zelf een task is
 * Een ansible content collection is een bundeling van roles, ansible plugins en playbooks
 * Collections worden aangeboden door redhat of via community
 
-```
+```text
 collection/
 ├── docs/
 ├── galaxy.yml
@@ -338,7 +344,7 @@ collection/
 
 ---
 
-# Windows
+## Windows
 
 --
 
@@ -363,16 +369,17 @@ Deze zaken zijn beter op te lossen in OS-image of server bootstrap
 
 --
 
-# Inventory
+## Inventory windows
 
-```
+```ini
 [windows_webservers]
 winweb01 ansible_connection=winrm ansible_port=5985
 ```
 
 --
 
-# Playbook
+## Playbook windows
+
 ```yaml
 - name: install-iis
   win_feature:
@@ -384,13 +391,9 @@ winweb01 ansible_connection=winrm ansible_port=5985
     dest: "C:\\inetpub\\wwwroot\\index.html"
 ```
 
---
-
-# Demo
-
 ---
 
-# Best Practices
+## Best Practices
 
 * Always name tasks
 * Use YAML syntax for tasks
@@ -399,14 +402,18 @@ winweb01 ansible_connection=winrm ansible_port=5985
 --
 
 ## Always name tasks
+
 Don't
+
 ```yaml
 - yum:
     name: httpd
     state: installed
 ```
+
 Do
-```
+
+```yaml
 - name: Ensure web server software is installed
   yum:
     name: httpd
@@ -416,12 +423,16 @@ Do
 --
 
 ## Use YAML syntax
+
 Don't
+
 ```yaml
 - name: Install webserver
   yum: name=httpd state=installed  update_cache=yes
 ```
+
 Do
+
 ```yaml
 - name: Install webserver
   yum: 
@@ -433,6 +444,7 @@ Do
 --
 
 ## Keep it simple
+
 When you can do something simply, do something simply. Do not reach to use every feature of Ansible together, all at once. Use what works for you. For example, you will probably not need vars, vars_files, vars_prompt and –extra-vars all at once, while also using an external inventory file.
 
 If something feels complicated, it probably is, and may be a good opportunity to simplify things.
@@ -441,17 +453,16 @@ If something feels complicated, it probably is, and may be a good opportunity to
 
 ## Ansible Automation Platform
 
+---
 
+## Demo
 
 ---
 
-# Demo
+## Links
 
----
+This presentation: <https://wouterhummelink.github.io/slides/ansible.html>
 
-# Links
-This presentation: https://wouterhummelink.github.io/slides/ansible.html
 * [Best Practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
 * [Roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html)
 * [Ansible & Windows](https://docs.ansible.com/ansible/latest/user_guide/windows_usage.html)
-
